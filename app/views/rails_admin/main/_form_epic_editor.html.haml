@@ -1,18 +1,24 @@
-#epiceditor
-  = form.text_area field.method_name, field.html_attributes.reverse_merge({ id: 'my-edit-area', class: 'form-control', rows: 20 }).reverse_merge({ value: field.form_value })
+- d_id = "d_#{field.bindings[:object].class.name}_#{field.bindings[:object].id}_#{field.css_class}"
+- t_id = "t_#{field.bindings[:object].class.name}_#{field.bindings[:object].id}_#{field.css_class}"
+%div{id: d_id}
+  = form.text_area field.method_name, field.html_attributes.reverse_merge({ id: t_id, class: 'form-control', rows: 20 }).reverse_merge({ value: field.form_value })
 = javascript_include_tag "epiceditor.js"
 :javascript
   (function($) {
     var opts = {
+      container: '#{d_id}',
+      localStorageName: '#{d_id}',
       theme: {
         base: '#{ asset_url('base/epiceditor.css') }',
-        preview: '#{ asset_url('preview/github.css') }',
+        preview: '#{ asset_url(field.preview_css_file) }',
         editor: '#{ asset_url('editor/epic-dark.css') }',
       },
       autogrow: {
         minHeight: 200,
       },
       clientSideStorage: false,
+      autogrow: true,
+      previewSelector: '#{field_preview_selector}'
     }
 
     var editor = new EpicEditor(opts).load();
