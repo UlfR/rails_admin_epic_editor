@@ -558,6 +558,16 @@
 
     callback = callback || function () {};
 
+    previewer = '<div class="epiceditor-preview"></div>';
+    if (self.settings.previewSelector) {
+	    var pSel = self.settings.previewSelector.reverse();
+	    pSel[0][2] += ' epiceditor-preview';
+	    previewer = pSel.reduce(function(s, x){
+		return [ "<" + x[0] + " id='" + x[1] + "' class='" + x[2] + "'>" + s[0], s[1] + "</" + x[0] + ">" ];
+	    }, [ '', '']).join('');
+    }
+
+
     // The editor HTML
     // TODO: edit-mode class should be dynamically added
     _HtmlTemplates = {
@@ -573,8 +583,8 @@
                 '</div>'
     
     // The previewer is just an empty box for the generated HTML to go into
-    , previewer: '<div id="epiceditor-preview"></div>'
-    , editor: '<!doctype HTML>'
+	, previewer: previewer
+	, editor: '<!doctype HTML>'
     };
 
     // Write an iframe and then select it for the editor
@@ -646,7 +656,7 @@
 
     // Now grab the editor and previewer for later use
     self.editor = self.editorIframeDocument.body;
-    self.previewer = self.previewerIframeDocument.getElementById('epiceditor-preview');
+    self.previewer = self.previewerIframeDocument.getElementsByClassName('epiceditor-preview')[0];
    
     self.editor.contentEditable = true;
  
